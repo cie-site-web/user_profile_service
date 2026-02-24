@@ -1,17 +1,37 @@
-name: Deploy Static Site to Vercel
+name: CI - CD
 
 on:
+  # 🔥 Tests sur TOUTES les branches à chaque push
+  push:
+
+  # 🔥 Tests sur PR vers dev et main
   pull_request:
     branches:
+      - dev
       - main
-    types:
-      - closed
 
 jobs:
-  deploy:
-    if: github.event.pull_request.merged == true
+  test:
+    name: 🧪 Run Tests & Coverage
     runs-on: ubuntu-latest
 
     steps:
       - name: 📥 Checkout repository
         uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      - name: 📦 Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      - name: 📦 Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: 🧪 Run coverage
+        run: pnpm vitest run --coverage
