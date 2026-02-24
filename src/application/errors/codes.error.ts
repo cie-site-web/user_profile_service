@@ -1,0 +1,13 @@
+// src/application/errors/codes.error.ts
+
+export const CodesError = {
+  USER_NOT_FOUND: 'USER_NOT_FOUND',
+  PROFILE_NOT_FOUND: 'PROFILE_NOT_FOUND',
+  TALK_LANGAGE_NOT_FOUND: 'TALK_LANGAGE_NOT_FOUND',
+  DUPLICATE_USER: 'DUPLICATE_USER',
+  DUPLICATE_PROFILE: 'DUPLICATE_PROFILE',
+  DUPLICATE_TALK_LANGAGE: 'DUPLICATE_TALK_LANGAGE',
+  EMAIL_ALREADY_EXISTS: 'EMAIL_ALREADY_EXISTS',
+} as const;
+
+export type CodesError = typeof CodesError[keyof typeof CodesError];
