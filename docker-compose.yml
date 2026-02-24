@@ -1,12 +1,11 @@
-version: "3.9"
-
 services:
 # =====================================================================================
 # ENV DEV
 # =====================================================================================
 
-  api-dev:
-    container_name: nest-api-dev
+  user_profile-service-dev:
+    image: user_profile-service-dev
+    container_name: user_profile-service-dev
     build:
       context: .
       dockerfile: Dockerfile.dev
@@ -17,18 +16,16 @@ services:
       - .:/app
       - /app/node_modules
     env_file:
-      - .env
+      - ./src/infrastructure/config/.env.dev
     depends_on:
-      - db-dev
+      - user_profile-db-dev
     profiles: ["dev"]
 
-  db-dev:
+  user_profile-db-dev:
     image: postgres:16
-    container_name: nest-db-dev
-    environment:
-      POSTGRES_DB: nest_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+    container_name: user_profile-db-dev
+    env_file:
+      - ./src/infrastructure/config/.env.dev
     ports:
       - "5433:5432"
     volumes:
@@ -40,27 +37,25 @@ services:
 # ENV PROD
 # =====================================================================================
 
-  api-prod:
-    container_name: nest-api-prod
+  user_profile-service-prod:
+    container_name: user_profile-service-prod
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
     env_file:
-      - .env
+      - ./src/infrastructure/config/.env.prod
     depends_on:
-      - db-prod
+      - user_profile-db-prod
     restart: unless-stopped
     profiles: ["prod"]
 
-  db-prod:
+  user_profile-db-prod:
     image: postgres:16
-    container_name: nest-db-prod
-    environment:
-      POSTGRES_DB: nest_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+    container_name: user_profile-db-prod
+    env_file:
+      - ./src/infrastructure/config/.env.prod
     volumes:
       - pgdata-prod:/var/lib/postgresql/data
     restart: unless-stopped
